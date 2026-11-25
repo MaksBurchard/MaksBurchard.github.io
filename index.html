@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maks Burchard, data science and AI</title>
+<meta name="description" content="Maks Burchard, Applied Data Science and AI student at Breda University of Applied Sciences, looking for an internship. Five projects with the real numbers.">
+<meta property="og:title" content="Maks Burchard, data science and AI">
+<meta property="og:description" content="Five projects with my own role and the real numbers. Looking for an internship in data science or machine learning.">
+<meta name="theme-color" content="#f2f5f1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231f3fbf'/%3E%3Cpath d='M14 46V18h6l12 17 12-17h6v28h-6V28L32 44 20 28v18z' fill='%23fff'/%3E%3C/svg%3E">
+<style>
+  :root {
+    --paper: #f2f5f1;
+    --ink: #14211c;
+    --ink-soft: #46544e;
+    --rule: #cbd5cf;
+    --accent: #1f3fbf;
+    --accent-ink: #ffffff;
+    --track: #dfe6e1;
+    --bar: #1f3fbf;
+    --bar-quiet: #8d9a93;
+    --serif: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+    --sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #101815;
+      --ink: #e8efea;
+      --ink-soft: #a5b3ac;
+      --rule: #2b3832;
+      --accent: #8aa2ff;
+      --accent-ink: #0b1220;
+      --track: #223029;
+      --bar: #8aa2ff;
+      --bar-quiet: #66756d;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #101815; --ink: #e8efea; --ink-soft: #a5b3ac; --rule: #2b3832;
+    --accent: #8aa2ff; --accent-ink: #0b1220; --track: #223029; --bar: #8aa2ff; --bar-quiet: #66756d;
+  }
+
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+  }
+  .wrap { max-width: 60rem; margin: 0 auto; padding: 0 1rem; }
+  a { color: var(--accent); text-underline-offset: 0.18em; }
+  a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* Header */
+  header { padding: 3.5rem 0 2.5rem; border-bottom: 1px solid var(--rule); }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 600;
+    font-size: clamp(2.6rem, 8vw, 4.75rem);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.25rem;
+  }
+  .lede { font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.45; max-width: 36rem; margin: 0 0 1.25rem; }
+  .intro { max-width: 38rem; color: var(--ink-soft); margin: 0 0 1.75rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 0.75rem; padding: 0; margin: 0; list-style: none; }
+  .links a {
+    display: inline-block; padding: 0.6rem 1rem; border: 1.5px solid var(--accent);
+    border-radius: 6px; text-decoration: none; font-weight: 600;
+  }
+  .links a.primary { background: var(--accent); color: var(--accent-ink); }
+  .links a:hover { text-decoration: underline; }
+
+  /* Sections */
+  section { padding: 2.5rem 0; border-bottom: 1px solid var(--rule); }
+  h2 { font-family: var(--serif); font-weight: 600; font-size: 1.75rem; letter-spacing: -0.01em; margin: 0 0 0.35rem; }
+  .section-note { color: var(--ink-soft); margin: 0 0 1.5rem; max-width: 38rem; }
+
+  /* Project rows */
+  .project { display: grid; grid-template-columns: 1fr; gap: 1rem 2.5rem; padding: 1.75rem 0; border-top: 1px solid var(--rule); }
+  .project:first-of-type { border-top: 0; padding-top: 0.5rem; }
+  .project h3 { font-family: var(--serif); font-weight: 600; font-size: 1.4rem; line-height: 1.25; margin: 0 0 0.3rem; }
+  .context { color: var(--ink-soft); font-size: 0.95rem; margin: 0 0 0.9rem; }
+  .project p { margin: 0 0 0.8rem; max-width: 38rem; }
+  .role { font-weight: 600; }
+  .tools { color: var(--ink-soft); font-size: 0.95rem; margin: 0; }
+  .caveat { font-size: 0.95rem; color: var(--ink-soft); border-left: 3px solid var(--rule); padding-left: 0.75rem; }
+  @media (min-width: 52rem) {
+    .project { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); }
+  }
+
+  /* Result bars: the numbers are real, the bars are drawn from zero */
+  figure { margin: 0; }
+  figcaption { font-size: 0.9rem; color: var(--ink-soft); margin-top: 0.75rem; }
+  .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
+  .bars li { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem; align-items: baseline; font-size: 0.95rem; }
+  .bars .name { grid-column: 1; }
+  .bars .val { grid-column: 2; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .bars .track { grid-column: 1 / -1; height: 0.65rem; background: var(--track); border-radius: 2px; overflow: hidden; }
+  .bars .fill {
+    display: block; height: 100%;
+    width: calc(var(--v) / var(--max) * 100%);
+    background: var(--bar-quiet);
+    transform-origin: left center;
+    animation: grow 0.9s cubic-bezier(.2,.7,.2,1) both;
+  }
+  .bars li.best .fill { background: var(--bar); }
+  @keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+  @media (prefers-reduced-motion: reduce) { .bars .fill { animation: none; } }
+
+  /* Skills and education */
+  dl { margin: 0; display: grid; grid-template-columns: 1fr; gap: 0.25rem 2rem; }
+  dt { font-weight: 600; margin-top: 0.9rem; }
+  dd { margin: 0; color: var(--ink-soft); }
+  @media (min-width: 40rem) {
+    dl { grid-template-columns: 11rem 1fr; }
+    dt, dd { margin-top: 0; padding: 0.6rem 0; border-top: 1px solid var(--rule); }
+    dt:first-of-type, dt:first-of-type + dd { border-top: 0; }
+  }
+
+  footer { padding: 2rem 0 3rem; color: var(--ink-soft); font-size: 0.95rem; }
+  footer p { margin: 0 0 0.5rem; max-width: 40rem; }
+
+  @media print {
+    body { background: #fff; color: #000; font-size: 11pt; }
+    .links a { border: 0; padding: 0; }
+    .bars .fill { animation: none; background: #555; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <h1>Maks Burchard</h1>
+    <!-- TODO: add your internship dates, for example "available from February 2027 for 5 months". -->
+    <p class="lede">Applied Data Science and AI student at Breda University of Applied Sciences, looking for an internship in data science or machine learning.</p>
+    <p class="intro">I build models, test them honestly, and report what did not work. Below are five projects, each with my own role and the actual numbers.</p>
+    <ul class="links">
+      <!-- TODO: replace YOUR_EMAIL and YOUR_LINKEDIN_URL, and add your CV as cv.pdf next to this file. -->
+      <li><a class="primary" href="mailto:240894@buas.nl">Email me</a></li>
+      <li><a href="https://www.linkedin.com/in/maks-burchard-86553b281/">LinkedIn</a></li>
+      <li><a href="cv.pdf">Download my CV</a></li>
+    </ul>
+  </div>
+</header>
+
+<main>
+<section aria-labelledby="projects">
+  <div class="wrap">
+    <h2 id="projects">Projects</h2>
+    <p class="section-note">The code sits in private school repositories, so this page shows results and my part in each project. I am happy to walk through the work in an interview.</p>
+
+    <!-- To give a project its own page later, add: <p><a href="projects/playsmart.html">Read the full write-up</a></p> inside the left column. -->
+
+    <article class="project">
+      <div>
+        <h3>Predicting a player's death in League of Legends</h3>
+        <p class="context">PlaySmart esports analytics toolkit, year 3, team project</p>
+        <p>A model that estimates, at any moment of a recorded game, the chance that the player dies within the next 5 seconds. It could help a coach find the moments worth reviewing.</p>
+        <p><span class="role">My part:</span> I wrote the whole death-risk modelling module and its tests, about 4,700 lines. It compares a logistic baseline, gradient boosting, a small GRU network and a time-to-die style network, using 31 features built only from past data. Models are tuned and scored with nested leave-one-match-out validation, so no match appears in both training and testing.</p>
+        <p class="caveat">The sample is small (27 sessions, 16 matches, 1,638 deaths), and the model mostly spots a health collapse already under way. The team used an AI coding assistant on this project and says so in the project README; I can explain every module I wrote.</p>
+        <p class="tools">Python, pandas, NumPy, scikit-learn, pytest</p>
+      </div>
+      <figure>
+        <ul class="bars" aria-label="Average precision by model">
+          <li><span class="name">Guessing at the base rate</span><span class="val">0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.023;--max:0.4"></span></span></li>
+          <li><span class="name">Baseline</span><span class="val">0.19</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.188;--max:0.4"></span></span></li>
+          <li><span class="name">Gradient boosting</span><span class="val">0.37</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.369;--max:0.4"></span></span></li>
+          <li><span class="name">GRU sequence model</span><span class="val">0.38</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.378;--max:0.4"></span></span></li>
+          <li class="best"><span class="name">Time-to-die style network</span><span class="val">0.39</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.390;--max:0.4"></span></span></li>
+        </ul>
+        <figcaption>Average precision (higher is better), 5-second horizon. Deaths are rare, so chance sits at 0.02.</figcaption>
+      </figure>
+    </article>
+
+    <article class="project">
+      <div>
+        <h3>Robot arm control: PID against reinforcement learning</h3>
+        <p class="context">Year 2, block B, individual</p>
+        <p>The task was to move the pipette tip of a simulated Opentrons OT-2 liquid-handling robot to any target in its workspace.</p>
+        <p><span class="role">My part:</span> I tuned a PID controller and, separately, built a custom Gymnasium environment and trained a PPO agent with a reward that combines a time penalty, a distance penalty and a success bonus. I also connected the controller to a computer-vision pipeline that finds root tips.</p>
+        <p class="caveat">The PID controller won for this task. The RL agent reached the 5 mm target every time but never got below 1 mm, because I trained it to stop at 5 mm.</p>
+        <p class="tools">Python, PyBullet, Stable-Baselines3, Gymnasium, TensorBoard</p>
+      </div>
+      <figure>
+        <ul class="bars" aria-label="Mean positioning error in millimetres">
+          <li class="best"><span class="name">PID controller</span><span class="val">0.16 mm</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.16;--max:4"></span></span></li>
+          <li><span class="name">PPO agent</span><span class="val">3.56 mm</span><span class="track" aria-hidden="true"><span class="fill" style="--v:3.56;--max:4"></span></span></li>
+        </ul>
+        <figcaption>Mean final distance to the target (lower is better). PID was tested on 5 random targets, PPO on 14 episodes, all within 5 mm.</figcaption>
+      </figure>
+    </article>
+
+    <article class="project">
+      <div>
+        <h3>Plant root phenotyping as a deployed ML system</h3>
+        <p class="context">Year 2, block D, team of four</p>
+        <p>A full stack that detects and separates plant roots in images, collects user feedback, retrains the models and redeploys them. It uses an RT-DETR detector and SegFormer models, behind a FastAPI backend and a Streamlit frontend, with Airflow, MLflow, Docker and a CI/CD pipeline that gates merges on 85% test coverage.</p>
+        <p><span class="role">My part:</span> I added the MLflow experiment tracking to training, evaluation and the retraining loop. I also wrote the cost comparison of cloud against on-premises deployment, and the demo day documentation and poster.</p>
+        <p class="tools">Python, MLflow, Docker, FastAPI, Airflow, GitHub Actions</p>
+      </div>
+      <figure>
+        <ul class="bars" aria-label="Project scale">
+          <li><span class="name">Services in the full local stack</span><span class="val">11+</span></li>
+          <li><span class="name">Airflow DAGs</span><span class="val">5</span></li>
+          <li><span class="name">Test coverage required to merge</span><span class="val">85%</span></li>
+        </ul>
+        <figcaption>Facts from the project README. This is a team result; my share is described on the left.</figcaption>
+      </figure>
+    </article>
+
+    <article class="project">
+      <div>
+        <h3>Emotion in TV shows from speech</h3>
+        <p class="context">Year 2, block A, team of three</p>
+        <p>A pipeline that turns a video into text and then into labelled emotions, as a cheaper local alternative to large language models.</p>
+        <p><span class="role">My part:</span> I built and iterated on Naive Bayes and BERT-style classifiers, wrote the baseline, and worked on error analysis and explainability, using gradient times input, layer-wise relevance propagation and a token-removal test on a RoBERTa model.</p>
+        <p class="tools">Python, scikit-learn, transformers, AssemblyAI, Whisper</p>
+      </div>
+      <figure>
+        <ul class="bars" aria-label="Word error rate by speech-to-text model">
+          <li><span class="name">Whisper</span><span class="val">11.7%</span><span class="track" aria-hidden="true"><span class="fill" style="--v:11.7;--max:15"></span></span></li>
+          <li class="best"><span class="name">AssemblyAI (chosen)</span><span class="val">10.8%</span><span class="track" aria-hidden="true"><span class="fill" style="--v:10.8;--max:15"></span></span></li>
+        </ul>
+        <figcaption>Word error rate of the transcripts (lower is better). We chose AssemblyAI for accuracy and cost.</figcaption>
+      </figure>
+    </article>
+
+    <article class="project">
+      <div>
+        <h3>Predicting arousal at historic forts</h3>
+        <p class="context">Year 2 end-of-block challenge, individual</p>
+        <p>The goal was to predict a visitor's skin-conductance response (<code>phasic_z</code>) from location and time features while they visited forts in the Netherlands and Belgium.</p>
+        <p><span class="role">My part:</span> everything, from feature engineering to the report. I built many features, kept the most important ones and compared a model trained on a subset against one trained on all the data.</p>
+        <p class="caveat">The subset model beat the full-data model. My hypothesis is that the subsets were dominated by single forts, so a model per fort may work better. I did not have time to test it, and the report says so.</p>
+        <p class="tools">Python, pandas, scikit-learn, geospatial features</p>
+      </div>
+      <figure>
+        <ul class="bars" aria-label="R squared by model">
+          <li><span class="name">Baseline</span><span class="val">&minus;0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0;--max:0.15"></span></span></li>
+          <li class="best"><span class="name">Subset of the data</span><span class="val">0.12</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.12;--max:0.15"></span></span></li>
+          <li><span class="name">All the data</span><span class="val">0.01</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.01;--max:0.15"></span></span></li>
+        </ul>
+        <figcaption>R&sup2; on held-out data (higher is better). Zero means no better than predicting the average.</figcaption>
+      </figure>
+    </article>
+  </div>
+</section>
+
+<section aria-labelledby="skills">
+  <div class="wrap">
+    <h2 id="skills">Skills</h2>
+    <dl>
+      <dt>Modelling</dt>
+      <dd>scikit-learn, gradient boosting, neural networks in Keras and TensorFlow, transformer text models, reinforcement learning with PPO</dd>
+      <dt>Data</dt>
+      <dd>Python, pandas, NumPy, SQL (PostgreSQL), time series, feature engineering</dd>
+      <dt>Evaluation and explainability</dt>
+      <dd>Nested and leave-one-group-out validation, error analysis, gradient times input, layer-wise relevance propagation</dd>
+      <dt>Engineering practice</dt>
+      <dd>Git and GitHub, pytest, Docker and MLflow (in team projects), code review and CI</dd>
+    </dl>
+  </div>
+</section>
+
+<section aria-labelledby="education">
+  <div class="wrap">
+    <h2 id="education">Education</h2>
+    <dl>
+      <dt>2024 to now</dt>
+      <dd>Applied Data Science and AI, Breda University of Applied Sciences. Currently in year 3.</dd>
+    </dl>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Looking for an internship in data science or machine learning. The quickest way to reach me is <a href="mailto:240894@buas.nl">by email</a>.</p>
+    <p>Figures come from my project reports and saved results. The projects were done for my studies, and some used data I cannot share.</p>
+  </div>
+</footer>
+
+</body>
+</html>
