@@ -160,21 +160,22 @@
     <article class="project">
       <div>
         <h3>Predicting a player's death in League of Legends</h3>
-        <p class="context">PlaySmart esports analytics toolkit, year 3, team project</p>
+        <p class="context">PlaySmart esports analytics toolkit, year 3, team project, still in progress</p>
         <p>A model that estimates, at any moment of a recorded game, the chance that the player dies within the next 5 seconds. It could help a coach find the moments worth reviewing.</p>
-        <p><span class="role">My part:</span> I wrote the whole death-risk modelling module and its tests, about 4,700 lines. It compares a logistic baseline, gradient boosting, a small GRU network and a time-to-die style network, using 31 features built only from past data. Models are tuned and scored with nested leave-one-match-out validation, so no match appears in both training and testing.</p>
-        <p class="caveat">The sample is small (27 sessions, 16 matches, 1,638 deaths), and the model mostly spots a health collapse already under way. The team used an AI coding assistant on this project and says so in the project README; I can explain every module I wrote.</p>
+        <p><span class="role">My part:</span> I wrote the death-risk modelling module and its tests. It compares a simple baseline, logistic regression, gradient boosting, a small GRU network and a time-to-die style network, using features built only from past data. Models are tuned and scored with nested leave-one-match-out validation, so no match appears in both training and testing. The tuned logistic regression scored best, narrowly ahead of the neural networks.</p>
+        <p class="caveat">The project is still running, so these results are from halfway through the block and may change. The sample is small (27 sessions, 16 matches, 1,638 deaths), and the model mostly spots a health collapse already under way. The team used an AI coding assistant on this project and says so in the project README; I can explain every module I wrote.</p>
         <p class="tools">Python, pandas, NumPy, scikit-learn, pytest</p>
       </div>
       <figure>
         <ul class="bars" aria-label="Average precision by model">
-          <li><span class="name">Guessing at the base rate</span><span class="val">0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.023;--max:0.4"></span></span></li>
-          <li><span class="name">Baseline</span><span class="val">0.19</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.188;--max:0.4"></span></span></li>
-          <li><span class="name">Gradient boosting</span><span class="val">0.37</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.369;--max:0.4"></span></span></li>
-          <li><span class="name">GRU sequence model</span><span class="val">0.38</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.378;--max:0.4"></span></span></li>
-          <li class="best"><span class="name">Time-to-die style network</span><span class="val">0.39</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.390;--max:0.4"></span></span></li>
+          <li><span class="name">Guessing at the base rate</span><span class="val">0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.023;--max:0.42"></span></span></li>
+          <li><span class="name">Simple baseline</span><span class="val">0.19</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.188;--max:0.42"></span></span></li>
+          <li><span class="name">Gradient boosting</span><span class="val">0.37</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.369;--max:0.42"></span></span></li>
+          <li><span class="name">GRU sequence model</span><span class="val">0.38</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.378;--max:0.42"></span></span></li>
+          <li><span class="name">Time-to-die style network</span><span class="val">0.39</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.390;--max:0.42"></span></span></li>
+          <li class="best"><span class="name">Logistic regression with history features</span><span class="val">0.40</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.398;--max:0.42"></span></span></li>
         </ul>
-        <figcaption>Average precision (higher is better), 5-second horizon. Deaths are rare, so chance sits at 0.02.</figcaption>
+        <figcaption>Average precision (higher is better), 5-second horizon, halfway through the block. Deaths are rare, so chance sits at 0.02.</figcaption>
       </figure>
     </article>
 
@@ -183,7 +184,7 @@
         <h3>Robot arm control: PID against reinforcement learning</h3>
         <p class="context">Year 2, block B, individual</p>
         <p>The task was to move the pipette tip of a simulated Opentrons OT-2 liquid-handling robot to any target in its workspace.</p>
-        <p><span class="role">My part:</span> I tuned a PID controller and, separately, built a custom Gymnasium environment and trained a PPO agent with a reward that combines a time penalty, a distance penalty and a success bonus. I also connected the controller to a computer-vision pipeline that finds root tips.</p>
+        <p>I tuned a PID controller and, separately, built a custom Gymnasium environment and trained a PPO agent with a reward that combines a time penalty, a distance penalty and a success bonus. I also connected the controller to a computer-vision pipeline that finds root tips.</p>
         <p class="caveat">The PID controller won for this task. The RL agent reached the 5 mm target every time but never got below 1 mm, because I trained it to stop at 5 mm.</p>
         <p class="tools">Python, PyBullet, Stable-Baselines3, Gymnasium, TensorBoard</p>
       </div>
@@ -202,6 +203,7 @@
         <p class="context">Year 2, block D, team of four</p>
         <p>A full stack that detects and separates plant roots in images, collects user feedback, retrains the models and redeploys them. It uses an RT-DETR detector and SegFormer models, behind a FastAPI backend and a Streamlit frontend, with Airflow, MLflow, Docker and a CI/CD pipeline that gates merges on 85% test coverage.</p>
         <p><span class="role">My part:</span> I added the MLflow experiment tracking to training, evaluation and the retraining loop. I also wrote the cost comparison of cloud against on-premises deployment, and the demo day documentation and poster.</p>
+        <p>Earlier, in block B, I individually built a computer-vision pipeline that finds root tips in plant images and guides a robot (see the robot project above). The team did not use that part here, but it means I know the root-imaging side as well.</p>
         <p class="tools">Python, MLflow, Docker, FastAPI, Airflow, GitHub Actions</p>
       </div>
       <figure>
@@ -234,7 +236,7 @@
     <article class="project">
       <div>
         <h3>Predicting arousal at historic forts</h3>
-        <p class="context">Year 2 end-of-block challenge, individual</p>
+        <p class="context">Year 2, two-week challenge at the end of block B, individual</p>
         <p>The goal was to predict a visitor's skin-conductance response (<code>phasic_z</code>) from location and time features while they visited forts in the Netherlands and Belgium.</p>
         <p><span class="role">My part:</span> everything, from feature engineering to the report. I built many features, kept the most important ones and compared a model trained on a subset against one trained on all the data.</p>
         <p class="caveat">The subset model beat the full-data model. My hypothesis is that the subsets were dominated by single forts, so a model per fort may work better. I did not have time to test it, and the report says so.</p>
