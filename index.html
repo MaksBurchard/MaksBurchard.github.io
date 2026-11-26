@@ -53,10 +53,21 @@
   }
   .wrap { max-width: 60rem; margin: 0 auto; padding: 0 1rem; }
   a { color: var(--accent); text-underline-offset: 0.18em; }
-  a:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+  a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  /* Language switcher */
+  .lang { display: flex; justify-content: flex-end; gap: 0.25rem; margin: 0 0 1.75rem; }
+  .lang button {
+    font: inherit; font-size: 0.95rem; font-weight: 600; cursor: pointer;
+    min-width: 2.75rem; min-height: 2.5rem; padding: 0.4rem 0.7rem;
+    background: transparent; color: var(--ink-soft);
+    border: 1.5px solid transparent; border-radius: 6px;
+  }
+  .lang button:hover { color: var(--ink); border-color: var(--rule); }
+  .lang button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 
   /* Header */
-  header { padding: 3.5rem 0 2.5rem; border-bottom: 1px solid var(--rule); }
+  header { padding: 1rem 0 2.5rem; border-bottom: 1px solid var(--rule); }
   h1 {
     font-family: var(--serif);
     font-weight: 600;
@@ -99,7 +110,7 @@
   .bars { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.7rem; }
   .bars li { display: grid; grid-template-columns: 1fr auto; gap: 0.1rem 0.75rem; align-items: baseline; font-size: 0.95rem; }
   .bars .name { grid-column: 1; }
-  .bars .val { grid-column: 2; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .bars .val { grid-column: 2; font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; }
   .bars .track { grid-column: 1 / -1; height: 0.65rem; background: var(--track); border-radius: 2px; overflow: hidden; }
   .bars .fill {
     display: block; height: 100%;
@@ -117,7 +128,7 @@
   dt { font-weight: 600; margin-top: 0.9rem; }
   dd { margin: 0; color: var(--ink-soft); }
   @media (min-width: 40rem) {
-    dl { grid-template-columns: 11rem 1fr; }
+    dl { grid-template-columns: 13rem 1fr; }
     dt, dd { margin-top: 0; padding: 0.6rem 0; border-top: 1px solid var(--rule); }
     dt:first-of-type, dt:first-of-type + dd { border-top: 0; }
   }
@@ -127,6 +138,7 @@
 
   @media print {
     body { background: #fff; color: #000; font-size: 11pt; }
+    .lang { display: none; }
     .links a { border: 0; padding: 0; }
     .bars .fill { animation: none; background: #555; }
   }
@@ -136,15 +148,20 @@
 
 <header>
   <div class="wrap">
+    <nav class="lang" data-i18n-aria="nav_aria" aria-label="Language">
+      <button type="button" data-lang="en" lang="en" title="English" aria-pressed="true">EN</button>
+      <button type="button" data-lang="nl" lang="nl" title="Nederlands" aria-pressed="false">NL</button>
+      <button type="button" data-lang="pl" lang="pl" title="Polski" aria-pressed="false">PL</button>
+    </nav>
     <h1>Maks Burchard</h1>
     <!-- TODO: add your internship dates, for example "available from February 2027 for 5 months". -->
-    <p class="lede">Applied Data Science and AI student at Breda University of Applied Sciences, looking for an internship in data science or machine learning.</p>
-    <p class="intro">I build models, test them honestly, and report what did not work. Below are five projects, each with my own role and the actual numbers.</p>
+    <p class="lede" data-i18n="lede">Applied Data Science and AI student at Breda University of Applied Sciences, looking for an internship in data science or machine learning.</p>
+    <p class="intro" data-i18n="intro">I build models, test them honestly, and report what did not work. Below are five projects, each with my own role and the actual numbers.</p>
     <ul class="links">
-      <!-- TODO: replace YOUR_EMAIL and YOUR_LINKEDIN_URL, and add your CV as cv.pdf next to this file. -->
-      <li><a class="primary" href="mailto:240894@buas.nl">Email me</a></li>
+      <li><a class="primary" href="mailto:240894@buas.nl" data-i18n="btn_email">Email me</a></li>
       <li><a href="https://www.linkedin.com/in/maks-burchard-86553b281/">LinkedIn</a></li>
-      <li><a href="cv.pdf">Download my CV</a></li>
+      <!-- CV files next to this page: cv.pdf (English), cv-nl.pdf (Dutch), cv-pl.pdf (Polish). A missing translated file falls back to the English CV. -->
+      <li><a id="cv-link" href="cv.pdf" data-i18n="btn_cv">Download my CV</a></li>
     </ul>
   </div>
 </header>
@@ -152,103 +169,103 @@
 <main>
 <section aria-labelledby="projects">
   <div class="wrap">
-    <h2 id="projects">Projects</h2>
-    <p class="section-note">The code sits in private school repositories, so this page shows results and my part in each project. I am happy to walk through the work in an interview.</p>
+    <h2 id="projects" data-i18n="h_projects">Projects</h2>
+    <p class="section-note" data-i18n="projects_note">The code sits in private school repositories, so this page shows results and my part in each project. I am happy to walk through the work in an interview.</p>
 
     <!-- To give a project its own page later, add: <p><a href="projects/playsmart.html">Read the full write-up</a></p> inside the left column. -->
 
     <article class="project">
       <div>
-        <h3>Predicting a player's death in League of Legends</h3>
-        <p class="context">PlaySmart esports analytics toolkit, year 3, team project, still in progress</p>
-        <p>A model that estimates, at any moment of a recorded game, the chance that the player dies within the next 5 seconds. It could help a coach find the moments worth reviewing.</p>
-        <p><span class="role">My part:</span> I wrote the death-risk modelling module and its tests. It compares a simple baseline, logistic regression, gradient boosting, a small GRU network and a time-to-die style network, using features built only from past data. Models are tuned and scored with nested leave-one-match-out validation, so no match appears in both training and testing. The tuned logistic regression scored best, narrowly ahead of the neural networks.</p>
-        <p class="caveat">The project is still running, so these results are from halfway through the block and may change. The sample is small (27 sessions, 16 matches, 1,638 deaths), and the model mostly spots a health collapse already under way. The team used an AI coding assistant on this project and says so in the project README; I can explain every module I wrote.</p>
+        <h3 data-i18n="p1_h">Predicting a player's death in League of Legends</h3>
+        <p class="context" data-i18n="p1_ctx">PlaySmart esports analytics toolkit, year 3, team project, still in progress</p>
+        <p data-i18n="p1_a">A model that estimates, at any moment of a recorded game, the chance that the player dies within the next 5 seconds. It could help a coach find the moments worth reviewing.</p>
+        <p data-i18n="p1_b"><span class="role">My part:</span> I wrote the death-risk modelling module and its tests. It compares a simple baseline, logistic regression, gradient boosting, a small GRU network and a time-to-die style network, using features built only from past data. Models are tuned and scored with nested leave-one-match-out validation, so no match appears in both training and testing. The tuned logistic regression scored best, narrowly ahead of the neural networks.</p>
+        <p class="caveat" data-i18n="p1_c">The project is still running, so these results are from halfway through the block and may change. The sample is small (27 sessions, 16 matches, 1,638 deaths), and the model mostly spots a health collapse already under way. The team used an AI coding assistant on this project and says so in the project README; I can explain every module I wrote.</p>
         <p class="tools">Python, pandas, NumPy, scikit-learn, pytest</p>
       </div>
       <figure>
-        <ul class="bars" aria-label="Average precision by model">
-          <li><span class="name">Guessing at the base rate</span><span class="val">0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.023;--max:0.42"></span></span></li>
-          <li><span class="name">Simple baseline</span><span class="val">0.19</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.188;--max:0.42"></span></span></li>
+        <ul class="bars" data-i18n-aria="aria1" aria-label="Average precision by model">
+          <li><span class="name" data-i18n="b1_1">Guessing at the base rate</span><span class="val">0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.023;--max:0.42"></span></span></li>
+          <li><span class="name" data-i18n="b1_2">Simple baseline</span><span class="val">0.19</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.188;--max:0.42"></span></span></li>
           <li><span class="name">Gradient boosting</span><span class="val">0.37</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.369;--max:0.42"></span></span></li>
-          <li><span class="name">GRU sequence model</span><span class="val">0.38</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.378;--max:0.42"></span></span></li>
-          <li><span class="name">Time-to-die style network</span><span class="val">0.39</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.390;--max:0.42"></span></span></li>
-          <li class="best"><span class="name">Logistic regression with history features</span><span class="val">0.40</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.398;--max:0.42"></span></span></li>
+          <li><span class="name" data-i18n="b1_4">GRU sequence model</span><span class="val">0.38</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.378;--max:0.42"></span></span></li>
+          <li><span class="name" data-i18n="b1_5">Time-to-die style network</span><span class="val">0.39</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.390;--max:0.42"></span></span></li>
+          <li class="best"><span class="name" data-i18n="b1_6">Logistic regression with history features</span><span class="val">0.40</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.398;--max:0.42"></span></span></li>
         </ul>
-        <figcaption>Average precision (higher is better), 5-second horizon, halfway through the block. Deaths are rare, so chance sits at 0.02.</figcaption>
+        <figcaption data-i18n="fig1">Average precision (higher is better), 5-second horizon, halfway through the block. Deaths are rare, so chance sits at 0.02.</figcaption>
       </figure>
     </article>
 
     <article class="project">
       <div>
-        <h3>Robot arm control: PID against reinforcement learning</h3>
-        <p class="context">Year 2, block B, individual</p>
-        <p>The task was to move the pipette tip of a simulated Opentrons OT-2 liquid-handling robot to any target in its workspace.</p>
-        <p>I tuned a PID controller and, separately, built a custom Gymnasium environment and trained a PPO agent with a reward that combines a time penalty, a distance penalty and a success bonus. I also connected the controller to a computer-vision pipeline that finds root tips.</p>
-        <p class="caveat">The PID controller won for this task. The RL agent reached the 5 mm target every time but never got below 1 mm, because I trained it to stop at 5 mm.</p>
+        <h3 data-i18n="p2_h">Robot arm control: PID against reinforcement learning</h3>
+        <p class="context" data-i18n="p2_ctx">Year 2, block B, individual</p>
+        <p data-i18n="p2_a">The task was to move the pipette tip of a simulated Opentrons OT-2 liquid-handling robot to any target in its workspace.</p>
+        <p data-i18n="p2_b">I tuned a PID controller and, separately, built a custom Gymnasium environment and trained a PPO agent with a reward that combines a time penalty, a distance penalty and a success bonus. I also connected the controller to a computer-vision pipeline that finds root tips.</p>
+        <p class="caveat" data-i18n="p2_c">The PID controller won for this task. The RL agent reached the 5 mm target every time but never got below 1 mm, because I trained it to stop at 5 mm.</p>
         <p class="tools">Python, PyBullet, Stable-Baselines3, Gymnasium, TensorBoard</p>
       </div>
       <figure>
-        <ul class="bars" aria-label="Mean positioning error in millimetres">
-          <li class="best"><span class="name">PID controller</span><span class="val">0.16 mm</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.16;--max:4"></span></span></li>
-          <li><span class="name">PPO agent</span><span class="val">3.56 mm</span><span class="track" aria-hidden="true"><span class="fill" style="--v:3.56;--max:4"></span></span></li>
+        <ul class="bars" data-i18n-aria="aria2" aria-label="Mean positioning error in millimetres">
+          <li class="best"><span class="name" data-i18n="b2_1">PID controller</span><span class="val">0.16 mm</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.16;--max:4"></span></span></li>
+          <li><span class="name" data-i18n="b2_2">PPO agent</span><span class="val">3.56 mm</span><span class="track" aria-hidden="true"><span class="fill" style="--v:3.56;--max:4"></span></span></li>
         </ul>
-        <figcaption>Mean final distance to the target (lower is better). PID was tested on 5 random targets, PPO on 14 episodes, all within 5 mm.</figcaption>
+        <figcaption data-i18n="fig2">Mean final distance to the target (lower is better). PID was tested on 5 random targets, PPO on 14 episodes, all within 5 mm.</figcaption>
       </figure>
     </article>
 
     <article class="project">
       <div>
-        <h3>Plant root phenotyping as a deployed ML system</h3>
-        <p class="context">Year 2, block D, team of four</p>
-        <p>A full stack that detects and separates plant roots in images, collects user feedback, retrains the models and redeploys them. It uses an RT-DETR detector and SegFormer models, behind a FastAPI backend and a Streamlit frontend, with Airflow, MLflow, Docker and a CI/CD pipeline that gates merges on 85% test coverage.</p>
-        <p><span class="role">My part:</span> I added the MLflow experiment tracking to training, evaluation and the retraining loop. I also wrote the cost comparison of cloud against on-premises deployment, and the demo day documentation and poster.</p>
-        <p>Earlier, in block B, I individually built a computer-vision pipeline that finds root tips in plant images and guides a robot (see the robot project above). The team did not use that part here, but it means I know the root-imaging side as well.</p>
+        <h3 data-i18n="p3_h">Plant root phenotyping as a deployed ML system</h3>
+        <p class="context" data-i18n="p3_ctx">Year 2, block D, team of four</p>
+        <p data-i18n="p3_a">A full stack that detects and separates plant roots in images, collects user feedback, retrains the models and redeploys them. It uses an RT-DETR detector and SegFormer models, behind a FastAPI backend and a Streamlit frontend, with Airflow, MLflow, Docker and a CI/CD pipeline that gates merges on 85% test coverage.</p>
+        <p data-i18n="p3_b"><span class="role">My part:</span> I added the MLflow experiment tracking to training, evaluation and the retraining loop. I also wrote the cost comparison of cloud against on-premises deployment, and the demo day documentation and poster.</p>
+        <p data-i18n="p3_c">Earlier, in block B, I individually built a computer-vision pipeline that finds root tips in plant images and guides a robot (see the robot project above). The team did not use that part here, but it means I know the root-imaging side as well.</p>
         <p class="tools">Python, MLflow, Docker, FastAPI, Airflow, GitHub Actions</p>
       </div>
       <figure>
-        <ul class="bars" aria-label="Project scale">
-          <li><span class="name">Services in the full local stack</span><span class="val">11+</span></li>
+        <ul class="bars" data-i18n-aria="aria3" aria-label="Project scale">
+          <li><span class="name" data-i18n="b3_1">Services in the full local stack</span><span class="val">11+</span></li>
           <li><span class="name">Airflow DAGs</span><span class="val">5</span></li>
-          <li><span class="name">Test coverage required to merge</span><span class="val">85%</span></li>
+          <li><span class="name" data-i18n="b3_3">Test coverage required to merge</span><span class="val">85%</span></li>
         </ul>
-        <figcaption>Facts from the project README. This is a team result; my share is described on the left.</figcaption>
+        <figcaption data-i18n="fig3">Facts from the project README. This is a team result; my share is described in the text.</figcaption>
       </figure>
     </article>
 
     <article class="project">
       <div>
-        <h3>Emotion in TV shows from speech</h3>
-        <p class="context">Year 2, block A, team of three</p>
-        <p>A pipeline that turns a video into text and then into labelled emotions, as a cheaper local alternative to large language models.</p>
-        <p><span class="role">My part:</span> I built and iterated on Naive Bayes and BERT-style classifiers, wrote the baseline, and worked on error analysis and explainability, using gradient times input, layer-wise relevance propagation and a token-removal test on a RoBERTa model.</p>
+        <h3 data-i18n="p4_h">Emotion in TV shows from speech</h3>
+        <p class="context" data-i18n="p4_ctx">Year 2, block A, team of three</p>
+        <p data-i18n="p4_a">A pipeline that turns a video into text and then into labelled emotions, as a cheaper local alternative to large language models.</p>
+        <p data-i18n="p4_b"><span class="role">My part:</span> I built and iterated on Naive Bayes and BERT-style classifiers, wrote the baseline, and worked on error analysis and explainability, using gradient times input, layer-wise relevance propagation and a token-removal test on a RoBERTa model.</p>
         <p class="tools">Python, scikit-learn, transformers, AssemblyAI, Whisper</p>
       </div>
       <figure>
-        <ul class="bars" aria-label="Word error rate by speech-to-text model">
+        <ul class="bars" data-i18n-aria="aria4" aria-label="Word error rate by speech-to-text model">
           <li><span class="name">Whisper</span><span class="val">11.7%</span><span class="track" aria-hidden="true"><span class="fill" style="--v:11.7;--max:15"></span></span></li>
-          <li class="best"><span class="name">AssemblyAI (chosen)</span><span class="val">10.8%</span><span class="track" aria-hidden="true"><span class="fill" style="--v:10.8;--max:15"></span></span></li>
+          <li class="best"><span class="name" data-i18n="b4_2">AssemblyAI (chosen)</span><span class="val">10.8%</span><span class="track" aria-hidden="true"><span class="fill" style="--v:10.8;--max:15"></span></span></li>
         </ul>
-        <figcaption>Word error rate of the transcripts (lower is better). We chose AssemblyAI for accuracy and cost.</figcaption>
+        <figcaption data-i18n="fig4">Word error rate of the transcripts (lower is better). We chose AssemblyAI for accuracy and cost.</figcaption>
       </figure>
     </article>
 
     <article class="project">
       <div>
-        <h3>Predicting arousal at historic forts</h3>
-        <p class="context">Year 2, two-week challenge at the end of block B, individual</p>
-        <p>The goal was to predict a visitor's skin-conductance response (<code>phasic_z</code>) from location and time features while they visited forts in the Netherlands and Belgium.</p>
-        <p><span class="role">My part:</span> everything, from feature engineering to the report. I built many features, kept the most important ones and compared a model trained on a subset against one trained on all the data.</p>
-        <p class="caveat">The subset model beat the full-data model. My hypothesis is that the subsets were dominated by single forts, so a model per fort may work better. I did not have time to test it, and the report says so.</p>
+        <h3 data-i18n="p5_h">Predicting arousal at historic forts</h3>
+        <p class="context" data-i18n="p5_ctx">Year 2, two-week challenge at the end of block B, individual</p>
+        <p data-i18n="p5_a">The goal was to predict a visitor's skin-conductance response (<code>phasic_z</code>) from location and time features while they visited forts in the Netherlands and Belgium.</p>
+        <p data-i18n="p5_b"><span class="role">My part:</span> everything, from feature engineering to the report. I built many features, kept the most important ones and compared a model trained on a subset against one trained on all the data.</p>
+        <p class="caveat" data-i18n="p5_c">The subset model beat the full-data model. My hypothesis is that the subsets were dominated by single forts, so a model per fort may work better. I did not have time to test it, and the report says so.</p>
         <p class="tools">Python, pandas, scikit-learn, geospatial features</p>
       </div>
       <figure>
-        <ul class="bars" aria-label="R squared by model">
-          <li><span class="name">Baseline</span><span class="val">&minus;0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0;--max:0.15"></span></span></li>
-          <li class="best"><span class="name">Subset of the data</span><span class="val">0.12</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.12;--max:0.15"></span></span></li>
-          <li><span class="name">All the data</span><span class="val">0.01</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.01;--max:0.15"></span></span></li>
+        <ul class="bars" data-i18n-aria="aria5" aria-label="R squared by model">
+          <li><span class="name" data-i18n="b5_1">Baseline</span><span class="val">&minus;0.02</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0;--max:0.15"></span></span></li>
+          <li class="best"><span class="name" data-i18n="b5_2">Subset of the data</span><span class="val">0.12</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.12;--max:0.15"></span></span></li>
+          <li><span class="name" data-i18n="b5_3">All the data</span><span class="val">0.01</span><span class="track" aria-hidden="true"><span class="fill" style="--v:0.01;--max:0.15"></span></span></li>
         </ul>
-        <figcaption>R&sup2; on held-out data (higher is better). Zero means no better than predicting the average.</figcaption>
+        <figcaption data-i18n="fig5">R&sup2; on held-out data (higher is better). Zero means no better than predicting the average.</figcaption>
       </figure>
     </article>
   </div>
@@ -256,26 +273,32 @@
 
 <section aria-labelledby="skills">
   <div class="wrap">
-    <h2 id="skills">Skills</h2>
+    <h2 id="skills" data-i18n="h_skills">Skills</h2>
     <dl>
-      <dt>Modelling</dt>
-      <dd>scikit-learn, gradient boosting, neural networks in Keras and TensorFlow, transformer text models, reinforcement learning with PPO</dd>
-      <dt>Data</dt>
-      <dd>Python, pandas, NumPy, SQL (PostgreSQL), time series, feature engineering</dd>
-      <dt>Evaluation and explainability</dt>
-      <dd>Nested and leave-one-group-out validation, error analysis, gradient times input, layer-wise relevance propagation</dd>
-      <dt>Engineering practice</dt>
-      <dd>Git and GitHub, pytest, Docker and MLflow (in team projects), code review and CI</dd>
+      <dt data-i18n="sk1_t">Modelling</dt>
+      <dd data-i18n="sk1_d">scikit-learn, gradient boosting, neural networks in Keras and TensorFlow, transformer text models, reinforcement learning with PPO</dd>
+      <dt data-i18n="sk2_t">Data</dt>
+      <dd data-i18n="sk2_d">Python, pandas, NumPy, SQL (PostgreSQL), time series, feature engineering</dd>
+      <dt data-i18n="sk3_t">Evaluation and explainability</dt>
+      <dd data-i18n="sk3_d">Nested and leave-one-group-out validation, error analysis, gradient times input, layer-wise relevance propagation</dd>
+      <dt data-i18n="sk4_t">Engineering practice</dt>
+      <dd data-i18n="sk4_d">Git and GitHub, pytest, Docker and MLflow (in team projects), code review and CI</dd>
     </dl>
   </div>
 </section>
 
 <section aria-labelledby="education">
   <div class="wrap">
-    <h2 id="education">Education</h2>
+    <h2 id="education" data-i18n="h_edu">Education</h2>
     <dl>
-      <dt>2024 to now</dt>
-      <dd>Applied Data Science and AI, Breda University of Applied Sciences. Currently in year 3.</dd>
+      <dt data-i18n="edu1_t">2024 to now</dt>
+      <dd data-i18n="edu1_d">Applied Data Science and AI, Breda University of Applied Sciences. Currently in year 3.</dd>
+      <dt data-i18n="edu2_t">Sep 2023 to Jul 2024</dt>
+      <dd data-i18n="edu2_d">HAVO (senior general secondary education), Christiaan Huygens Lyceum</dd>
+      <dt data-i18n="edu3_t">Sep 2021 to Jul 2023</dt>
+      <dd data-i18n="edu3_d">Atheneum (pre-university education), Christiaan Huygens Lyceum</dd>
+      <dt data-i18n="edu4_t">Sep 2017 to Jul 2021</dt>
+      <dd data-i18n="edu4_d">Gymnasium (pre-university education), Christiaan Huygens Lyceum</dd>
     </dl>
   </div>
 </section>
@@ -283,10 +306,277 @@
 
 <footer>
   <div class="wrap">
-    <p>Looking for an internship in data science or machine learning. The quickest way to reach me is <a href="mailto:240894@buas.nl">by email</a>.</p>
-    <p>Figures come from my project reports and saved results. The projects were done for my studies, and some used data I cannot share.</p>
+    <p><span data-i18n="foot1">Looking for an internship in data science or machine learning.</span> <span data-i18n="foot2">The quickest way to reach me is</span> <a href="mailto:240894@buas.nl" data-i18n="foot_link">by email</a>.</p>
+    <p data-i18n="foot3">Figures come from my project reports and saved results. The projects were done for my studies, and some used data I cannot share.</p>
   </div>
 </footer>
+
+<script>
+/* Translations. English is the default and lives in the HTML above; this
+   file only holds Dutch (nl) and Polish (pl). To fix a sentence, find its
+   data-i18n key in the HTML and edit the matching line below. */
+(function () {
+  var T = {
+    nl: {
+      title: `Maks Burchard, data science en AI`,
+      meta_desc: `Maks Burchard, student Applied Data Science and AI aan de Breda University of Applied Sciences, op zoek naar een stage. Vijf projecten met de echte cijfers.`,
+      nav_aria: `Taal`,
+      lede: `Student Applied Data Science and AI aan de Breda University of Applied Sciences, op zoek naar een stage in data science of machine learning.`,
+      intro: `Ik bouw modellen, test ze eerlijk en rapporteer wat niet werkte. Hieronder staan vijf projecten, elk met mijn eigen rol en de echte cijfers.`,
+      btn_email: `Mail me`,
+      btn_cv: `Download mijn cv`,
+      btn_cv_fb: `Download mijn cv (Engels)`,
+      h_projects: `Projecten`,
+      projects_note: `De code staat in privérepositories van school, dus deze pagina toont resultaten en mijn aandeel in elk project. In een gesprek loop ik het werk graag met je door.`,
+
+      p1_h: `De dood van een speler voorspellen in League of Legends`,
+      p1_ctx: `PlaySmart, toolkit voor esportsanalyse, jaar 3, teamproject, nog in uitvoering`,
+      p1_a: `Een model dat op elk moment van een opgenomen potje inschat hoe groot de kans is dat de speler binnen 5 seconden doodgaat. Het kan een coach helpen de momenten te vinden die het bespreken waard zijn.`,
+      p1_b: `<span class="role">Mijn deel:</span> Ik schreef de module voor het modelleren van het sterfterisico en de bijbehorende tests. Die vergelijkt een eenvoudige baseline, logistische regressie, gradient boosting, een klein GRU-netwerk en een netwerk in time-to-die-stijl, met features die alleen uit eerdere data zijn opgebouwd. Modellen worden afgesteld en beoordeeld met geneste leave-one-match-out-validatie, zodat geen enkele match in zowel training als test voorkomt. De afgestelde logistische regressie scoorde het best, nipt vóór de neurale netwerken.`,
+      p1_c: `Het project loopt nog, dus deze resultaten komen uit het midden van het blok en kunnen nog veranderen. De steekproef is klein (27 sessies, 16 matches, 1.638 doden) en het model signaleert vooral een gezondheidsinstorting die al bezig is. Het team gebruikte een AI-codeerassistent voor dit project en vermeldt dat in de README van het project; ik kan elke module die ik schreef uitleggen.`,
+      aria1: `Average precision per model`,
+      b1_1: `Gokken op basis van de basiskans`,
+      b1_2: `Eenvoudige baseline`,
+      b1_4: `GRU-sequentiemodel`,
+      b1_5: `Netwerk in time-to-die-stijl`,
+      b1_6: `Logistische regressie met historiekenmerken`,
+      fig1: `Average precision (hoger is beter), horizon van 5 seconden, halverwege het blok. Doden zijn zeldzaam, dus gokken levert 0,02 op.`,
+
+      p2_h: `Robotarmbesturing: PID tegenover reinforcement learning`,
+      p2_ctx: `Jaar 2, blok B, individueel`,
+      p2_a: `De opdracht was om de pipetpunt van een gesimuleerde Opentrons OT-2-pipetteerrobot naar een willekeurig doel in zijn werkruimte te bewegen.`,
+      p2_b: `Ik heb een PID-regelaar afgesteld en, los daarvan, een eigen Gymnasium-omgeving gebouwd en een PPO-agent getraind met een beloning die een tijdstraf, een afstandsstraf en een succesbonus combineert. Ook koppelde ik de regelaar aan een computervisiepijplijn die worteltoppen vindt.`,
+      p2_c: `De PID-regelaar won bij deze taak. De RL-agent haalde het doel van 5 mm elke keer, maar kwam nooit onder de 1 mm, omdat ik hem trainde om bij 5 mm te stoppen.`,
+      aria2: `Gemiddelde positioneringsfout in millimeters`,
+      b2_1: `PID-regelaar`,
+      b2_2: `PPO-agent`,
+      fig2: `Gemiddelde eindafstand tot het doel (lager is beter). PID is getest op 5 willekeurige doelen, PPO op 14 episodes, alle binnen 5 mm.`,
+
+      p3_h: `Fenotypering van plantenwortels als in productie genomen ML-systeem`,
+      p3_ctx: `Jaar 2, blok D, team van vier`,
+      p3_a: `Een volledige stack die plantenwortels in beelden detecteert en scheidt, feedback van gebruikers verzamelt, de modellen hertraint en opnieuw uitrolt. Het gebruikt een RT-DETR-detector en SegFormer-modellen, achter een FastAPI-backend en een Streamlit-frontend, met Airflow, MLflow, Docker en een CI/CD-pijplijn die merges alleen toestaat bij 85% testdekking.`,
+      p3_b: `<span class="role">Mijn deel:</span> Ik voegde de MLflow-experimenttracking toe aan training, evaluatie en de hertrainingslus. Ook schreef ik de kostenvergelijking tussen cloud en on-premises uitrol, en de documentatie en poster voor de demodag.`,
+      p3_c: `Eerder, in blok B, bouwde ik individueel een computervisiepijplijn die worteltoppen in plantenbeelden vindt en een robot aanstuurt (zie het robotproject hierboven). Het team gebruikte dat deel hier niet, maar ik ken daardoor ook de beeldkant van wortels.`,
+      aria3: `Omvang van het project`,
+      b3_1: `Services in de volledige lokale stack`,
+      b3_3: `Testdekking vereist voor een merge`,
+      fig3: `Feiten uit de README van het project. Dit is een teamresultaat; mijn aandeel staat in de tekst beschreven.`,
+
+      p4_h: `Emotie in tv-programma's, afgeleid uit spraak`,
+      p4_ctx: `Jaar 2, blok A, team van drie`,
+      p4_a: `Een pijplijn die een video omzet in tekst en vervolgens in gelabelde emoties, als goedkoper lokaal alternatief voor grote taalmodellen.`,
+      p4_b: `<span class="role">Mijn deel:</span> Ik bouwde en verbeterde Naive Bayes- en BERT-achtige classifiers, schreef de baseline en werkte aan foutenanalyse en verklaarbaarheid, met gradient times input, layer-wise relevance propagation en een token-verwijderingstest op een RoBERTa-model.`,
+      aria4: `Woordfoutpercentage per spraak-naar-tekstmodel`,
+      b4_2: `AssemblyAI (gekozen)`,
+      fig4: `Woordfoutpercentage van de transcripties (lager is beter). We kozen AssemblyAI vanwege nauwkeurigheid en kosten.`,
+
+      p5_h: `Opwinding voorspellen bij historische forten`,
+      p5_ctx: `Jaar 2, uitdaging van twee weken aan het eind van blok B, individueel`,
+      p5_a: `Het doel was om de huidgeleidingsrespons van een bezoeker (<code>phasic_z</code>) te voorspellen uit locatie- en tijdkenmerken tijdens bezoeken aan forten in Nederland en België.`,
+      p5_b: `<span class="role">Mijn deel:</span> alles, van feature engineering tot het rapport. Ik bouwde veel features, hield de belangrijkste over en vergeleek een model getraind op een deel van de data met een model getraind op alle data.`,
+      p5_c: `Het model op het deel van de data versloeg het model op alle data. Mijn hypothese is dat de deelverzamelingen door afzonderlijke forten werden gedomineerd, dus een model per fort werkt misschien beter. Ik had geen tijd om dat te testen, en het rapport zegt dat ook.`,
+      aria5: `R-kwadraat per model`,
+      b5_1: `Baseline`,
+      b5_2: `Deel van de data`,
+      b5_3: `Alle data`,
+      fig5: `R&sup2; op achtergehouden data (hoger is beter). Nul betekent niet beter dan het gemiddelde voorspellen.`,
+
+      h_skills: `Vaardigheden`,
+      sk1_t: `Modelleren`,
+      sk1_d: `scikit-learn, gradient boosting, neurale netwerken in Keras en TensorFlow, transformer-tekstmodellen, reinforcement learning met PPO`,
+      sk2_t: `Data`,
+      sk2_d: `Python, pandas, NumPy, SQL (PostgreSQL), tijdreeksen, feature engineering`,
+      sk3_t: `Evaluatie en verklaarbaarheid`,
+      sk3_d: `Geneste validatie en leave-one-group-out-validatie, foutenanalyse, gradient times input, layer-wise relevance propagation`,
+      sk4_t: `Engineeringpraktijk`,
+      sk4_d: `Git en GitHub, pytest, Docker en MLflow (in teamprojecten), code review en CI`,
+
+      h_edu: `Opleiding`,
+      edu1_t: `2024 tot nu`,
+      edu1_d: `Applied Data Science and AI, Breda University of Applied Sciences. Momenteel in jaar 3.`,
+      edu2_t: `sep. 2023 tot jul. 2024`,
+      edu2_d: `HAVO, Christiaan Huygens Lyceum`,
+      edu3_t: `sep. 2021 tot jul. 2023`,
+      edu3_d: `Atheneum, Christiaan Huygens Lyceum`,
+      edu4_t: `sep. 2017 tot jul. 2021`,
+      edu4_d: `Gymnasium, Christiaan Huygens Lyceum`,
+
+      foot1: `Op zoek naar een stage in data science of machine learning.`,
+      foot2: `Je bereikt me het snelst`,
+      foot_link: `per e-mail`,
+      foot3: `De cijfers komen uit mijn projectrapporten en opgeslagen resultaten. De projecten zijn gedaan voor mijn studie en sommige gebruikten data die ik niet kan delen.`
+    },
+
+    pl: {
+      title: `Maks Burchard, data science i AI`,
+      meta_desc: `Maks Burchard, student Applied Data Science and AI w Breda University of Applied Sciences, szuka stażu. Pięć projektów z prawdziwymi liczbami.`,
+      nav_aria: `Język`,
+      lede: `Student kierunku Applied Data Science and AI w Breda University of Applied Sciences, szukam stażu z zakresu data science lub uczenia maszynowego.`,
+      intro: `Buduję modele, testuję je uczciwie i raportuję to, co nie zadziałało. Poniżej pięć projektów, każdy z opisem mojej roli i prawdziwymi liczbami.`,
+      btn_email: `Napisz do mnie`,
+      btn_cv: `Pobierz moje CV`,
+      btn_cv_fb: `Pobierz moje CV (po angielsku)`,
+      h_projects: `Projekty`,
+      projects_note: `Kod znajduje się w prywatnych repozytoriach szkolnych, więc ta strona pokazuje wyniki i mój udział w każdym projekcie. Chętnie omówię tę pracę podczas rozmowy.`,
+
+      p1_h: `Przewidywanie śmierci gracza w League of Legends`,
+      p1_ctx: `PlaySmart, zestaw narzędzi do analityki esportowej, rok 3, projekt zespołowy, w toku`,
+      p1_a: `Model, który w dowolnym momencie nagranej gry szacuje szansę, że gracz zginie w ciągu najbliższych 5 sekund. Może pomóc trenerowi znaleźć momenty warte omówienia.`,
+      p1_b: `<span class="role">Moja część:</span> Napisałem moduł modelowania ryzyka śmierci wraz z testami. Porównuje on prostą linię bazową, regresję logistyczną, gradient boosting, małą sieć GRU oraz sieć w stylu time-to-die, na cechach zbudowanych wyłącznie z wcześniejszych danych. Modele są strojone i oceniane za pomocą zagnieżdżonej walidacji leave-one-match-out, dzięki czemu żaden mecz nie trafia jednocześnie do treningu i testu. Najlepszy wynik uzyskała dostrojona regresja logistyczna, nieznacznie wyprzedzając sieci neuronowe.`,
+      p1_c: `Projekt wciąż trwa, więc te wyniki pochodzą ze środka bloku i mogą się zmienić. Próba jest mała (27 sesji, 16 meczów, 1&nbsp;638 śmierci), a model głównie wychwytuje spadek zdrowia, który już trwa. Zespół korzystał w tym projekcie z asystenta AI do kodowania i pisze o tym w README projektu; mogę wyjaśnić każdy moduł, który napisałem.`,
+      aria1: `Average precision według modelu`,
+      b1_1: `Zgadywanie według częstości bazowej`,
+      b1_2: `Prosta linia bazowa`,
+      b1_4: `Model sekwencyjny GRU`,
+      b1_5: `Sieć w stylu time-to-die`,
+      b1_6: `Regresja logistyczna z cechami historii`,
+      fig1: `Average precision (im wyżej, tym lepiej), horyzont 5 sekund, w połowie bloku. Śmierci są rzadkie, więc poziom losowy wynosi 0,02.`,
+
+      p2_h: `Sterowanie ramieniem robota: PID kontra uczenie ze wzmocnieniem`,
+      p2_ctx: `Rok 2, blok B, indywidualnie`,
+      p2_a: `Zadanie polegało na przesunięciu końcówki pipety symulowanego robota laboratoryjnego Opentrons OT-2 do dowolnego punktu w jego przestrzeni roboczej.`,
+      p2_b: `Dostroiłem regulator PID oraz, osobno, zbudowałem własne środowisko Gymnasium i wytrenowałem agenta PPO z nagrodą łączącą karę za czas, karę za odległość i premię za sukces. Połączyłem też regulator z potokiem wizji komputerowej, który znajduje końcówki korzeni.`,
+      p2_c: `W tym zadaniu wygrał regulator PID. Agent RL za każdym razem osiągał cel 5 mm, ale nigdy nie zszedł poniżej 1 mm, bo wytrenowałem go tak, by zatrzymywał się przy 5 mm.`,
+      aria2: `Średni błąd pozycjonowania w milimetrach`,
+      b2_1: `Regulator PID`,
+      b2_2: `Agent PPO`,
+      fig2: `Średnia końcowa odległość od celu (im mniej, tym lepiej). PID testowano na 5 losowych celach, PPO w 14 epizodach, wszystkie w granicach 5 mm.`,
+
+      p3_h: `Fenotypowanie korzeni roślin jako wdrożony system ML`,
+      p3_ctx: `Rok 2, blok D, zespół czteroosobowy`,
+      p3_a: `Kompletny system, który wykrywa i rozdziela korzenie roślin na zdjęciach, zbiera opinie użytkowników, ponownie trenuje modele i wdraża je od nowa. Wykorzystuje detektor RT-DETR i modele SegFormer, za backendem FastAPI i frontendem Streamlit, z Airflow, MLflow, Dockerem oraz potokiem CI/CD, który dopuszcza scalanie zmian dopiero przy 85% pokrycia testami.`,
+      p3_b: `<span class="role">Moja część:</span> Dodałem śledzenie eksperymentów MLflow do treningu, ewaluacji i pętli ponownego trenowania. Napisałem też porównanie kosztów wdrożenia w chmurze i on-premises oraz dokumentację i plakat na dzień demonstracji.`,
+      p3_c: `Wcześniej, w bloku B, samodzielnie zbudowałem potok wizji komputerowej, który znajduje końcówki korzeni na zdjęciach roślin i prowadzi robota (zob. projekt robota powyżej). Zespół nie wykorzystał tej części w tym projekcie, ale dzięki niej znam też stronę obrazową pracy z korzeniami.`,
+      aria3: `Skala projektu`,
+      b3_1: `Usługi w pełnym stosie lokalnym`,
+      b3_3: `Pokrycie testami wymagane do scalenia`,
+      fig3: `Fakty z README projektu. To wynik zespołowy; mój udział opisano w tekście.`,
+
+      p4_h: `Emocje w programach telewizyjnych na podstawie mowy`,
+      p4_ctx: `Rok 2, blok A, zespół trzyosobowy`,
+      p4_a: `Potok, który zamienia wideo w tekst, a następnie w oznaczone emocje, jako tańsza lokalna alternatywa dla dużych modeli językowych.`,
+      p4_b: `<span class="role">Moja część:</span> Zbudowałem i iteracyjnie ulepszałem klasyfikatory Naive Bayes oraz w stylu BERT, napisałem linię bazową i zajmowałem się analizą błędów oraz wyjaśnialnością, używając gradient times input, layer-wise relevance propagation i testu usuwania tokenów na modelu RoBERTa.`,
+      aria4: `Odsetek błędnych słów według modelu zamiany mowy na tekst`,
+      b4_2: `AssemblyAI (wybrany)`,
+      fig4: `Odsetek błędnie rozpoznanych słów w transkrypcjach (im mniej, tym lepiej). Wybraliśmy AssemblyAI ze względu na dokładność i koszt.`,
+
+      p5_h: `Przewidywanie pobudzenia emocjonalnego w historycznych fortach`,
+      p5_ctx: `Rok 2, dwutygodniowe wyzwanie na koniec bloku B, indywidualnie`,
+      p5_a: `Celem było przewidzenie reakcji przewodnictwa skórnego odwiedzającego (<code>phasic_z</code>) na podstawie cech lokalizacji i czasu podczas zwiedzania fortów w Holandii i Belgii.`,
+      p5_b: `<span class="role">Moja część:</span> wszystko, od inżynierii cech po raport. Zbudowałem wiele cech, zostawiłem najważniejsze i porównałem model wytrenowany na podzbiorze danych z modelem wytrenowanym na wszystkich danych.`,
+      p5_c: `Model na podzbiorze pokonał model na pełnych danych. Moja hipoteza jest taka, że w podzbiorach dominowały pojedyncze forty, więc model dla każdego fortu może działać lepiej. Nie miałem czasu tego sprawdzić i raport o tym wspomina.`,
+      aria5: `R kwadrat według modelu`,
+      b5_1: `Linia bazowa`,
+      b5_2: `Podzbiór danych`,
+      b5_3: `Wszystkie dane`,
+      fig5: `R&sup2; na danych testowych (im więcej, tym lepiej). Zero oznacza wynik nie lepszy niż przewidywanie średniej.`,
+
+      h_skills: `Umiejętności`,
+      sk1_t: `Modelowanie`,
+      sk1_d: `scikit-learn, gradient boosting, sieci neuronowe w Keras i TensorFlow, modele tekstowe typu transformer, uczenie ze wzmocnieniem z PPO`,
+      sk2_t: `Dane`,
+      sk2_d: `Python, pandas, NumPy, SQL (PostgreSQL), szeregi czasowe, inżynieria cech`,
+      sk3_t: `Ewaluacja i wyjaśnialność`,
+      sk3_d: `Walidacja zagnieżdżona i leave-one-group-out, analiza błędów, gradient times input, layer-wise relevance propagation`,
+      sk4_t: `Praktyki inżynierskie`,
+      sk4_d: `Git i GitHub, pytest, Docker i MLflow (w projektach zespołowych), code review i CI`,
+
+      h_edu: `Wykształcenie`,
+      edu1_t: `2024 do teraz`,
+      edu1_d: `Applied Data Science and AI, Breda University of Applied Sciences. Obecnie trzeci rok.`,
+      edu2_t: `wrz 2023 do lip 2024`,
+      edu2_d: `HAVO (holenderska szkoła średnia, poziom ogólny wyższy), Christiaan Huygens Lyceum`,
+      edu3_t: `wrz 2021 do lip 2023`,
+      edu3_d: `Atheneum (holenderska szkoła średnia przygotowująca do studiów uniwersyteckich), Christiaan Huygens Lyceum`,
+      edu4_t: `wrz 2017 do lip 2021`,
+      edu4_d: `Gymnasium (holenderska szkoła średnia przygotowująca do studiów uniwersyteckich), Christiaan Huygens Lyceum`,
+
+      foot1: `Szukam stażu z zakresu data science lub uczenia maszynowego.`,
+      foot2: `Najszybciej skontaktujesz się ze mną`,
+      foot_link: `przez e-mail`,
+      foot3: `Liczby pochodzą z moich raportów projektowych i zapisanych wyników. Projekty wykonałem w ramach studiów, a część z nich korzystała z danych, których nie mogę udostępniać.`
+    }
+  };
+
+  var LANGS = ['en', 'nl', 'pl'];
+  var CV = { en: 'cv.pdf', nl: 'cv-nl.pdf', pl: 'cv-pl.pdf' };
+
+  var textEls = document.querySelectorAll('[data-i18n]');
+  var ariaEls = document.querySelectorAll('[data-i18n-aria]');
+  var valEls = document.querySelectorAll('.val');
+  var buttons = document.querySelectorAll('.lang button');
+  var cvLink = document.getElementById('cv-link');
+  var metaDesc = document.querySelector('meta[name="description"]');
+
+  /* English is read from the page itself, so it can never drift from the HTML. */
+  var EN = { title: document.title, meta_desc: metaDesc ? metaDesc.getAttribute('content') : '', btn_cv_fb: cvLink.innerHTML };
+  for (var i = 0; i < textEls.length; i++) EN[textEls[i].getAttribute('data-i18n')] = textEls[i].innerHTML;
+  for (var j = 0; j < ariaEls.length; j++) EN[ariaEls[j].getAttribute('data-i18n-aria')] = ariaEls[j].getAttribute('aria-label');
+  for (var k = 0; k < valEls.length; k++) valEls[k].setAttribute('data-orig', valEls[k].textContent);
+  T.en = EN;
+
+  function t(lang, key) {
+    var d = T[lang];
+    return (d && d[key] !== undefined) ? d[key] : EN[key];
+  }
+
+  var cvToken = 0;
+  function setCv(lang) {
+    var mine = ++cvToken;
+    var label = t(lang, 'btn_cv');
+    cvLink.innerHTML = label;
+    cvLink.setAttribute('href', CV[lang]);
+    if (lang === 'en' || !window.fetch || window.location.protocol === 'file:') return;
+    /* If the translated CV is not on the server, link the English one instead. */
+    fetch(CV[lang], { method: 'HEAD' }).then(function (r) {
+      if (mine !== cvToken || r.ok) return;
+      cvLink.innerHTML = t(lang, 'btn_cv_fb');
+      cvLink.setAttribute('href', CV.en);
+    }).catch(function () { /* offline or opened from disk: keep the translated link */ });
+  }
+
+  function setLang(lang, save) {
+    if (LANGS.indexOf(lang) < 0) lang = 'en';
+    document.documentElement.setAttribute('lang', lang);
+    document.title = t(lang, 'title');
+    if (metaDesc) metaDesc.setAttribute('content', t(lang, 'meta_desc'));
+    for (var a = 0; a < textEls.length; a++) {
+      var key = textEls[a].getAttribute('data-i18n');
+      if (key === 'btn_cv') continue; /* handled by setCv */
+      textEls[a].innerHTML = t(lang, key);
+    }
+    for (var b = 0; b < ariaEls.length; b++) {
+      ariaEls[b].setAttribute('aria-label', t(lang, ariaEls[b].getAttribute('data-i18n-aria')));
+    }
+    for (var c = 0; c < valEls.length; c++) {
+      var orig = valEls[c].getAttribute('data-orig');
+      valEls[c].textContent = lang === 'en' ? orig : orig.replace(/(\d)\.(\d)/g, '$1,$2');
+    }
+    for (var d = 0; d < buttons.length; d++) {
+      buttons[d].setAttribute('aria-pressed', buttons[d].getAttribute('data-lang') === lang ? 'true' : 'false');
+    }
+    setCv(lang);
+    if (save) {
+      try { localStorage.setItem('lang', lang); } catch (e) {}
+      try {
+        var u = new URL(window.location.href);
+        if (lang === 'en') u.searchParams.delete('lang'); else u.searchParams.set('lang', lang);
+        window.history.replaceState(null, '', u.toString());
+      } catch (e) {}
+    }
+  }
+
+  for (var m = 0; m < buttons.length; m++) {
+    buttons[m].addEventListener('click', function () { setLang(this.getAttribute('data-lang'), true); });
+  }
+
+  /* Start language: ?lang=nl in the link wins, then the visitor's last choice, then English. */
+  var start = null;
+  try { start = new URLSearchParams(window.location.search).get('lang'); } catch (e) {}
+  if (!start) { try { start = localStorage.getItem('lang'); } catch (e) {} }
+  setLang(start || 'en', false);
+})();
+</script>
 
 </body>
 </html>
